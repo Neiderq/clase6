@@ -120,7 +120,13 @@ def main():
                 nombre=input("Ingrese el nombre de la mascota: ")
                 tipo=input("Ingrese el tipo de mascota (felino o canino): ")
                 peso=int(input("Ingrese el peso de la mascota: "))
-                fecha=input("Ingrese la fecha dd/mm/año: ")
+                while True:
+                    fecha = input("Ingrese la fecha de ingreso (dd/mm/aaaa): ")
+                    try:
+                        datetime.datetime.strptime(fecha, "%d/%m/%Y")
+                        break
+                    except ValueError:
+                        print("Formato incorrecto. Intente de nuevo.")
                 nm=int(input("Ingrese la cantidad de medicamentos: "))
                 lista_med=[]
 
