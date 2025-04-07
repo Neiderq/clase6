@@ -54,10 +54,17 @@ class Mascota:
             if medicamento.verNombre()==nombre_medicamento:
                 return True #Medicamento existe
         return False #Medicamento no existe
+    def eliminarMedicamento(self,nombre_medicamento):
+        for medicamento in self.__lista_medicamentos:
+            if medicamento.verNombre()==nombre_medicamento:
+                self.__lista_medicamentos.remove(medicamento)
+                return True
+        return False
+
 class sistemaV:
     def __init__(self):
-        self.__lista_caninos={}
-        self.__lista_felinos={}
+        self.__lista_caninos={} #Elemento contenedor de caninos
+        self.__lista_felinos={} #Elemento contenedor de felinos
     def verificarExiste(self,historia):
         for m in list(self.__lista_caninos.values())+list(self.__lista_felinos.values()):
             if historia == m.verHistoria():
@@ -102,7 +109,16 @@ class sistemaV:
             if mascota.verificarMedicamento(nombre_medicamento):
                 return True
         return False
-
+    def eliminarMedicamento(self,historia,nombre_medicamento):
+        if historia in self.__lista_felinos:
+            Mascota=self.__lista_felinos[historia]
+            if Mascota.eliminarMedicamento(nombre_medicamento):
+                return True #medicamento eliminado
+        elif historia in self.__lista_caninos:
+            Mascota=self.__lista_caninos[historia]
+            if Mascota.eliminarMedicamento(nombre_medicamento):
+                return True #medicamento eliminado
+        return False #mascota o medicamento no encontrado
 
 def main():
     servicio_hospitalario = sistemaV()
@@ -113,8 +129,9 @@ def main():
                        \n2- Ver fecha de ingreso 
                        \n3- Ver número de mascotas en el servicio 
                        \n4- Ver medicamentos que se están administrando
-                       \n5- Eliminar mascota 
-                       \n6- Salir 
+                       \n5- Eliminar mascota
+                       \n6- Eliminar medicamento de una mascota 
+                       \n7- Salir 
                        \nUsted ingresó la opción: ''' ))
         if menu==1: # Ingresar una mascota 
             if servicio_hospitalario.verNumeroMascotas() >= 10:
@@ -191,7 +208,19 @@ def main():
             else:
                 print("No se ha podido eliminar la mascota")
         
-        elif menu==6:
+        elif menu==6: #Elminar medicamento
+            try:
+                historia=int(input("Ingrese la historia clinica de la mascota: "))
+                nombre_medicamento=input("ingrese el nombre del medicamento: ")
+                if servicio_hospitalario.eliminarMedicamento(historia,nombre_medicamento):
+                    print(f"El medicamento{nombre_medicamento} ha sido eliminado con éxito")
+                else:
+                    print("No se pudo eliminar el medicamento, verifique los datos dados.")
+            except ValueError:
+                print("Debe ingresar un número entero para la historia clinica.")
+                continue
+        
+        elif menu==7:
             print("Usted ha salido del sistema de servicio de hospitalización...")
             break
         
